@@ -28,29 +28,29 @@ const ChatTab: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!inputMessage.trim()) return;
-    
+
     const userMessage: Message = {
       role: 'user',
       content: inputMessage
     };
-    
+
     setMessages(prev => [...prev, userMessage]);
     setInputMessage('');
     setIsLoading(true);
-    
+
     try {
       // Get only messages that should be sent to API (exclude welcome message)
       const apiMessages = messages.slice(1); // Skip welcome message
-      
+
       const response = await apiRequest('POST', '/api/chat', {
         messages: [...apiMessages, userMessage],
         newMessage: userMessage.content
       });
-      
+
       const data = await response.json();
-      
+
       if (data.success) {
         setMessages(prev => [
           ...prev, 
@@ -99,10 +99,10 @@ const ChatTab: React.FC = () => {
         ))}
         <div ref={messagesEndRef} />
       </div>
-      
+
       {/* Chat Input */}
       <div className="border-t border-gray-200 p-2 md:p-4 bg-gray-50">
-        <form className="flex items-end gap-2" onSubmit={handleSubmit}>
+        <form className="flex items-center gap-2" onSubmit={handleSubmit}> {/* Changed to items-center */}
           <div className="flex-grow">
             <textarea 
               rows={isMobile ? 1 : 2} 
