@@ -1,4 +1,5 @@
 import fetch from 'node-fetch';
+import { type Request, type Response } from 'express';
 
 // API key - API directa proporcionada por el usuario
 const API_KEY = 'AIzaSyDPuYdIpD29eODV4CeaooCEcgiTpIKh1N4';
@@ -6,6 +7,28 @@ const API_KEY = 'AIzaSyDPuYdIpD29eODV4CeaooCEcgiTpIKh1N4';
 // API Endpoint URLs 
 const baseUrl = 'https://generativelanguage.googleapis.com/v1beta/models';
 const modelEndpoint = `${baseUrl}/gemini-2.0-flash:generateContent?key=${API_KEY}`;
+
+// Define interfaces para la respuesta de la API
+interface GeminiContentPart {
+  text: string;
+}
+
+interface GeminiContent {
+  parts: GeminiContentPart[];
+  role?: string;
+}
+
+interface GeminiCandidate {
+  content: GeminiContent;
+  finishReason?: string;
+  safetyRatings?: any[];
+  index?: number;
+}
+
+interface GeminiApiResponse {
+  candidates: GeminiCandidate[];
+  promptFeedback?: any;
+}
 
 // Safety settings for API requests
 const safetySettings = [
@@ -28,18 +51,16 @@ const safetySettings = [
 ];
 
 // Helper function to make API requests
-async function makeApiRequest(content: any) {
+async function makeApiRequest(content: any): Promise<GeminiApiResponse> {
   try {
+    // Usar la estructura exacta del ejemplo curl proporcionado
     const requestBody = {
-      contents: [{ parts: content }],
-      safetySettings: safetySettings,
-      generationConfig: {
-        temperature: 0.7,
-        topP: 0.9,
-        topK: 40,
-        maxOutputTokens: 1024,
-      }
+      contents: [{
+        parts: content
+      }]
     };
+
+    console.log("Request body:", JSON.stringify(requestBody, null, 2));
 
     const response = await fetch(modelEndpoint, {
       method: 'POST',
@@ -51,10 +72,14 @@ async function makeApiRequest(content: any) {
 
     if (!response.ok) {
       const errorText = await response.text();
+      console.error('API error response:', errorText);
       throw new Error(`API request failed: ${response.status} ${response.statusText} - ${errorText}`);
     }
 
-    return await response.json();
+    const jsonResponse = await response.json();
+    console.log("API response:", JSON.stringify(jsonResponse, null, 2));
+    
+    return jsonResponse as GeminiApiResponse;
   } catch (error) {
     console.error('Error making API request:', error);
     throw error;
@@ -63,8 +88,8 @@ async function makeApiRequest(content: any) {
 
 export async function generateChatResponse(history: { role: string; content: string }[], newMessage: string) {
   try {
-    // Preparar el mensaje que se enviará a la API
-    const parts = [{ text: `Previous conversation: ${JSON.stringify(history)}\n\nUser message: ${newMessage}\n\nPlease respond to the user message.` }];
+    // Simplificar el mensaje para seguir exactamente el ejemplo de curl
+    const parts = [{ text: newMessage }];
     
     // Hacer la solicitud a la API
     const data = await makeApiRequest(parts);
