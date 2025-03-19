@@ -116,15 +116,20 @@ const ChatTab: React.FC = () => {
           </div>
           <button 
             type="submit" 
-            className="bg-gradient-to-r from-primary to-primary/80 hover:opacity-90 text-white rounded-full w-10 h-10 md:w-auto md:h-auto md:rounded-lg md:px-4 md:py-2 flex items-center justify-center shadow-sm transition-all"
+            className="bg-gradient-to-r from-primary to-primary/80 hover:opacity-90 text-white rounded-lg px-4 py-2 flex items-center justify-center shadow-sm transition-all"
             disabled={isLoading}
           >
             {isLoading ? (
-              <i className="fas fa-circle-notch fa-spin md:mr-2"></i>
+              <>
+                <i className="fas fa-circle-notch fa-spin md:mr-2"></i>
+                <span>Enviando</span>
+              </>
             ) : (
-              <i className="fas fa-paper-plane md:mr-2"></i>
+              <>
+                <i className="fas fa-paper-plane md:mr-2"></i>
+                <span>Enviar</span>
+              </>
             )}
-            <span className="hidden md:inline">Enviar</span>
           </button>
         </form>
       </div>
