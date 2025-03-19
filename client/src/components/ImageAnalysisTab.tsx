@@ -134,8 +134,8 @@ const ImageAnalysisTab: React.FC = () => {
               
               {/* Analysis Results */}
               <div className="md:w-1/2">
-                <h3 className="text-lg font-medium mb-3">Análisis de Gemini:</h3>
-                <div className="h-[300px] bg-gray-50 rounded-lg p-4 overflow-y-auto">
+                <h3 className="text-lg font-medium mb-3">Análisis de Kira:</h3>
+                <div className="h-[240px] md:h-[300px] bg-gray-50 rounded-lg p-4 overflow-y-auto">
                   {isAnalyzing ? (
                     <div className="animate-pulse">
                       <div className="h-4 bg-gray-200 rounded w-3/4 mb-3"></div>
