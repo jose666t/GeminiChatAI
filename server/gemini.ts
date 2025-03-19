@@ -10,12 +10,13 @@ const genAI = new GoogleGenerativeAI(API_KEY);
 
 // Generic text-only model
 const getGeminiProModel = () => {
-  return genAI.getGenerativeModel({ model: 'gemini-1.5-pro' });
+  return genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
 };
 
-// Vision-capable model
+// Vision-capable model 
+// Using gemini-2.0-flash también para visión ya que gemini-2.0-flash soporta imágenes
 const getGeminiProVisionModel = () => {
-  return genAI.getGenerativeModel({ model: 'gemini-1.5-pro-vision' });
+  return genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
 };
 
 // Safety settings
