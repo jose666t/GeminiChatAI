@@ -2,7 +2,7 @@ import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { z } from "zod";
-import { generateChatResponse, analyzeImage, translateText, generateCode } from "./gemini";
+import { generateChatResponse, analyzeImage, translateText, generateCode } from "./gemini_api";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Chat endpoint
