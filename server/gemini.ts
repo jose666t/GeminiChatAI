@@ -48,11 +48,15 @@ export async function generateChatResponse(history: { role: string; content: str
       : [];
     
     // Build a valid chat history for Gemini
+    const timeContext = "El año actual es 2025.";
     const chat = model.startChat({
-      history: validHistory.map(msg => ({
-        role: msg.role === 'user' ? 'user' : 'model',
-        parts: [{ text: msg.content }]
-      })),
+      history: [
+        { role: 'model', parts: [{ text: timeContext }] },
+        ...validHistory.map(msg => ({
+          role: msg.role === 'user' ? 'user' : 'model',
+          parts: [{ text: msg.content }]
+        }))
+      ],
       safetySettings: safetySetting,
     });
 
@@ -101,7 +105,11 @@ export async function translateText(text: string, sourceLanguage: string, target
     
     const prompt = `Translate the following text from ${sourceLanguage} to ${targetLanguage}:\n\n"${text}"\n\nOnly provide the translated text without any additional explanations.`;
     
-    const result = await model.generateContent(prompt);
+    // Add current date context
+    const currentYear = 2025;
+    const context = `We are currently in the year ${currentYear}. ${prompt}`;
+    
+    const result = await model.generateContent(context);
     const response = await result.response;
     const translatedText = response.text();
 
