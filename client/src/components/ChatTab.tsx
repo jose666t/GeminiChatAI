@@ -4,6 +4,7 @@ import { apiRequest } from '@/lib/queryClient';
 import { useToast } from '@/hooks/use-toast';
 
 const ChatTab: React.FC = () => {
+  // Starting with a welcome message but not sending it to the API
   const [messages, setMessages] = useState<Message[]>([
     { 
       role: 'model', 
@@ -38,8 +39,11 @@ const ChatTab: React.FC = () => {
     setIsLoading(true);
     
     try {
+      // Get only messages that should be sent to API (exclude welcome message)
+      const apiMessages = messages.slice(1); // Skip welcome message
+      
       const response = await apiRequest('POST', '/api/chat', {
-        messages,
+        messages: [...apiMessages, userMessage],
         newMessage: userMessage.content
       });
       

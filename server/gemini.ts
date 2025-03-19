@@ -42,8 +42,14 @@ export async function generateChatResponse(history: { role: string; content: str
   try {
     const model = getGeminiProModel();
     
+    // Ensure history starts with user message or is empty
+    const validHistory = history.length > 0 
+      ? (history[0].role === 'user' ? history : [])
+      : [];
+    
+    // Build a valid chat history for Gemini
     const chat = model.startChat({
-      history: history.map(msg => ({
+      history: validHistory.map(msg => ({
         role: msg.role === 'user' ? 'user' : 'model',
         parts: [{ text: msg.content }]
       })),
